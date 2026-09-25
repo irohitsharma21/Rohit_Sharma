@@ -1,0 +1,41 @@
+/* knowledge world styles (scope everything under .wl-knowledge) */
+.wl-knowledge .w-lede { max-width: 34ch; }
+
+.wl-knowledge .kn-stage { position: absolute; left: var(--gutter); bottom: 96px; width: min(400px, calc(100vw - 2 * var(--gutter))); }
+.wl-knowledge .kn-s { position: absolute; left: 0; bottom: 0; width: 100%; }
+.wl-knowledge .kn-i { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; color: var(--cyan); }
+.wl-knowledge .kn-s h3 { margin: 10px 0 0; font-weight: 300; font-size: clamp(22px, 2vw, 30px); letter-spacing: -0.02em; line-height: 1.1; color: var(--white); }
+.wl-knowledge .kn-s h3 em { font-style: normal; color: var(--smoke); }
+.wl-knowledge .kn-s p { margin: 12px 0 0; font-size: 13.5px; line-height: 1.6; color: var(--dim); max-width: 40ch; }
+.wl-knowledge .kn-tags { display: flex; flex-wrap: wrap; gap: 6px 14px; font-family: var(--mono); font-size: 10px !important; letter-spacing: 0.16em; text-transform: uppercase; }
+.wl-knowledge .kn-tags span::before { content: '·'; color: var(--cyan); margin-right: 8px; }
+
+.wl-knowledge .kn-ro { position: absolute; right: var(--gutter); top: 24vh; width: 190px; }
+.wl-knowledge .kn-g { position: absolute; right: 0; top: 0; display: flex; flex-direction: column; gap: 12px; align-items: flex-end; font-family: var(--mono); }
+.wl-knowledge .kn-g > div { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+.wl-knowledge .kn-g i { font-style: normal; font-size: 9px; letter-spacing: 0.24em; color: var(--smoke); }
+.wl-knowledge .kn-g b { font-weight: 400; font-size: 12px; letter-spacing: 0.12em; color: var(--chrome); font-variant-numeric: tabular-nums; }
+.wl-knowledge .kn-g > div::before { content: ''; width: 12px; height: 1px; background: var(--cyan); opacity: 0.6; margin-bottom: 5px; }
+.wl-knowledge .kn-ok { color: var(--green) !important; }
+.wl-knowledge .kn-ok::before { content: ''; display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--green); margin-right: 7px; vertical-align: 1px; box-shadow: 0 0 6px var(--green); }
+
+.wl-knowledge .kn-hint { position: absolute; right: var(--gutter); bottom: 136px; display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.22em; color: var(--dim); }
+.wl-knowledge .kn-hint span { width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--cyan); box-shadow: 0 0 8px rgba(98, 216, 255, 0.6); animation: knPing 2.4s ease-in-out infinite; }
+@keyframes knPing { 50% { transform: scale(1.6); opacity: 0.4; } }
+
+@media (max-width: 720px) {
+  .wl-knowledge .kn-stage { bottom: 84px; }
+  .wl-knowledge .kn-s p { font-size: 12.5px; }
+  .wl-knowledge .kn-ro { top: 78px; left: var(--gutter); right: var(--gutter); width: auto; }
+  .wl-knowledge .kn-g { position: absolute; left: 0; right: auto; top: 0; flex-direction: row; gap: 22px; align-items: flex-start; }
+  .wl-knowledge .kn-g > div { align-items: flex-start; }
+  .wl-knowledge .kn-hint { display: none; }
+}
+
+.wl-knowledge .kn-ans { position: absolute; right: var(--gutter); top: 52vh; width: 300px; font-family: var(--mono); }
+.wl-knowledge .kn-ak { display: block; font-size: 9px; letter-spacing: 0.24em; color: var(--cyan); margin-bottom: 10px; }
+.wl-knowledge .kn-ans p { margin: 0; padding: 7px 0; font-family: var(--sans); font-size: 13px; line-height: 1.4; color: var(--chrome); border-top: 1px solid var(--line); }
+.wl-knowledge .kn-ans sup { font-family: var(--mono); font-size: 9.5px; color: var(--cyan); margin-right: 10px; vertical-align: 2px; }
+.wl-knowledge .kn-wires { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.wl-knowledge .kn-wires path { fill: none; stroke: rgba(150, 226, 255, 0.85); stroke-width: 1; stroke-dasharray: 2 3; }
+.wl-knowledge .kn-wires circle { fill: rgba(98, 216, 255, 0.12); stroke: rgba(220, 244, 255, 0.95); stroke-width: 1; }

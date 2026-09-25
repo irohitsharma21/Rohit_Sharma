@@ -1,0 +1,47 @@
+/* skills world styles (scope everything under .wl-skills) */
+.wl-skills .w-head { top: 18vh; }
+
+.wl-skills .sk-legend {
+  position: absolute; left: var(--gutter); bottom: 96px;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+}
+.wl-skills .sk-lg-h { color: var(--smoke); font-size: 9px; letter-spacing: 0.24em; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+.wl-skills .sk-lg-h::after { content: ''; width: 28px; height: 1px; background: var(--line-strong); }
+.wl-skills .sk-lg-i {
+  appearance: none; background: none; border: 0; padding: 5px 0; margin: 0; cursor: pointer;
+  display: grid; grid-template-columns: 12px 24px auto 26px; align-items: center; column-gap: 8px;
+  font: inherit; letter-spacing: inherit; color: rgba(220, 232, 244, 0.42); text-align: left;
+  transition: color 0.5s var(--ease);
+}
+.wl-skills .sk-lg-i i {
+  width: 7px; height: 7px; border-radius: 50%; border: 1px solid rgba(201, 210, 220, 0.4);
+  transition: border-color 0.5s var(--ease), box-shadow 0.5s var(--ease), background 0.5s var(--ease);
+}
+.wl-skills .sk-n { color: rgba(220, 232, 244, 0.26); font-variant-numeric: tabular-nums; }
+.wl-skills .sk-c { color: rgba(220, 232, 244, 0.22); font-variant-numeric: tabular-nums; text-align: right; opacity: 0; transition: opacity 0.5s var(--ease); }
+.wl-skills .sk-lg-i:hover, .wl-skills .sk-lg-i:focus-visible, .wl-skills .sk-lg-i.is-active { color: var(--white); outline: none; }
+.wl-skills .sk-lg-i:hover i, .wl-skills .sk-lg-i:focus-visible i, .wl-skills .sk-lg-i.is-active i { border-color: var(--cyan); background: rgba(98, 216, 255, 0.35); box-shadow: 0 0 10px rgba(98, 216, 255, 0.6); }
+.wl-skills .sk-lg-i.is-active .sk-n { color: var(--cyan); }
+.wl-skills .sk-lg-i:hover .sk-c, .wl-skills .sk-lg-i.is-active .sk-c { opacity: 1; }
+.wl-skills .sk-hint { margin-top: 14px; color: rgba(220, 232, 244, 0.32); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; }
+
+.wl-skills .sk-also {
+  position: absolute; right: var(--gutter); bottom: 136px; max-width: min(430px, calc(100vw - 2 * var(--gutter)));
+  display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; align-items: baseline;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; line-height: 1.6; text-align: left;
+  padding-top: 12px; border-top: 1px solid var(--line);
+}
+.wl-skills .sk-also-k { color: var(--smoke); font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; white-space: nowrap; }
+.wl-skills .sk-also-v { color: rgba(220, 232, 244, 0.55); }
+
+@media (max-width: 720px) {
+  .wl-skills .sk-legend { bottom: 104px; right: var(--gutter); flex-direction: row; flex-wrap: wrap; gap: 2px 14px; font-size: 9px; letter-spacing: 0.14em; }
+  .wl-skills .sk-lg-h { display: none; }
+  .wl-skills .sk-lg-i { padding: 4px 0; grid-template-columns: 9px auto; column-gap: 7px; }
+  .wl-skills .sk-lg-i i { width: 6px; height: 6px; }
+  .wl-skills .sk-n, .wl-skills .sk-c { display: none; }
+  .wl-skills .sk-hint { flex-basis: 100%; margin-top: 6px; font-size: 8.5px; }
+  .wl-skills .sk-also { left: var(--gutter); right: var(--gutter); top: 16vh; bottom: auto; font-size: 9.5px; grid-template-columns: 1fr; gap: 2px; border-top: 0; padding-top: 0; }
+  .wl-skills .sk-also-k { margin-top: 8px; }
+}

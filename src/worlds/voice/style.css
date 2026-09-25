@@ -1,0 +1,40 @@
+/* voice world styles (scope everything under .wl-voice) */
+.wl-voice .vo-by { margin-top: 22px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; color: var(--smoke); text-transform: uppercase; }
+
+/* stage rail: a vertical progress rail of the six stages */
+.wl-voice .vo-rail { position: absolute; right: var(--gutter); top: 104px; display: flex; flex-direction: column; gap: 17px; padding-right: 18px; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.2em; }
+.wl-voice .vo-rail::after { content: ''; position: absolute; z-index: -1; inset: -26px -30px -26px -60px; background: radial-gradient(closest-side, rgba(3,5,7,0.62), rgba(3,5,7,0)); pointer-events: none; }
+.wl-voice .vo-rail::before { content: ''; position: absolute; right: 0; top: 4px; bottom: 4px; width: 1px; background: var(--line); }
+.wl-voice .vo-fill { position: absolute; right: 0; top: 4px; bottom: 4px; width: 1px; background: linear-gradient(var(--blue), var(--cyan)); transform-origin: 50% 0; transform: scaleY(0); }
+.wl-voice .vo-st { position: relative; display: flex; align-items: center; justify-content: flex-end; gap: 10px; color: rgba(220, 232, 244, 0.26); transition: color 0.6s var(--ease); white-space: nowrap; }
+.wl-voice .vo-n { font-variant-numeric: tabular-nums; }
+.wl-voice .vo-st i { position: absolute; right: -21px; width: 7px; height: 7px; border-radius: 50%; border: 1px solid rgba(190, 215, 240, 0.28); background: var(--obsidian); transition: border-color 0.5s, background 0.5s, box-shadow 0.5s; }
+.wl-voice .vo-st.is-done { color: var(--dim); }
+.wl-voice .vo-st.is-done i { border-color: rgba(98, 216, 255, 0.5); }
+.wl-voice .vo-st.is-on { color: var(--white); }
+.wl-voice .vo-st.is-on .vo-n { color: var(--cyan); }
+.wl-voice .vo-st.is-on i { border-color: var(--cyan); background: var(--cyan); box-shadow: 0 0 10px rgba(98, 216, 255, 0.8); }
+
+/* readouts: bottom-left band, above the HUD */
+.wl-voice .vo-ros { position: absolute; left: var(--gutter); bottom: 96px; width: min(520px, calc(100vw - 2 * var(--gutter))); }
+.wl-voice .vo-ro { position: absolute; left: 0; bottom: 0; width: 100%; }
+.wl-voice .vo-ro .ro-n { max-width: 44ch; line-height: 1.5; }
+.wl-voice .vo-pair { display: flex; gap: 48px; }
+.wl-voice .vo-tl { margin-top: 22px; width: min(340px, 100%); font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; color: var(--smoke); }
+.wl-voice .vo-tl-k, .wl-voice .vo-tl-s { display: flex; justify-content: space-between; }
+.wl-voice .vo-tl-v { color: var(--ice); font-variant-numeric: tabular-nums; }
+.wl-voice .vo-tl-bar { position: relative; height: 1px; margin: 9px 0 7px; background: var(--line-strong); }
+.wl-voice .vo-tl-bar i { position: absolute; inset: 0; background: linear-gradient(90deg, var(--blue), var(--cyan)); transform-origin: 0 50%; transform: scaleX(0.89); transition: transform 0.3s var(--ease); }
+.wl-voice .vo-tl-bar b { position: absolute; top: -3px; left: 89%; width: 1px; height: 7px; background: var(--white); box-shadow: 0 0 8px var(--cyan); transition: left 0.3s var(--ease); }
+.wl-voice .vo-tl-bar u { position: absolute; top: -4px; right: 0; width: 1px; height: 9px; background: var(--smoke); }
+.wl-voice .vo-tl-s span { color: rgba(220, 232, 244, 0.3); }
+.wl-voice .vo-note { margin: 16px 0 0; font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; color: var(--dim); }
+
+@media (max-width: 760px) {
+  .wl-voice .vo-rail { top: 84px; gap: 10px; }
+  .wl-voice .vo-l { display: none; }
+  .wl-voice .vo-st.is-on .vo-l { display: inline; }
+  .wl-voice .vo-ros { bottom: 84px; }
+  .wl-voice .vo-pair { gap: 28px; }
+  .wl-voice .w-lede { font-size: 13.5px; }
+}

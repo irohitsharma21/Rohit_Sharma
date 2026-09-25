@@ -1,0 +1,67 @@
+/* continuum world styles (scope everything under .wl-continuum) */
+.wl-continuum .cn-head .w-lede { max-width: 30ch; }
+.wl-continuum .cn-ctx {
+  display: flex; align-items: center; gap: 10px; margin: 20px 0 0;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--chrome);
+}
+.wl-continuum .cn-ctx i { width: 5px; height: 5px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); flex: none; }
+
+/* five beats: a quiet index on the right edge */
+.wl-continuum .cn-beats {
+  position: absolute; right: var(--gutter); top: calc(104px + env(safe-area-inset-top)); margin: 0; padding: 0 0 0 14px; list-style: none;
+  display: flex; flex-direction: column; gap: 13px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; color: rgba(220, 232, 244, 0.28);
+  border-left: 1px solid var(--line);
+}
+.wl-continuum .cn-beats li { position: relative; display: flex; gap: 10px; transition: color 0.6s var(--ease); }
+.wl-continuum .cn-beats li::before {
+  content: ''; position: absolute; left: -15px; top: -3px; bottom: -3px; width: 1px; background: var(--cyan);
+  transform: scaleY(0); transform-origin: 50% 0; transition: transform 0.7s var(--ease), opacity 0.6s;
+}
+.wl-continuum .cn-bn { font-variant-numeric: tabular-nums; color: rgba(220, 232, 244, 0.2); transition: color 0.6s var(--ease); }
+.wl-continuum .cn-beats li.is-done { color: rgba(220, 232, 244, 0.48); }
+.wl-continuum .cn-beats li.is-done::before { transform: scaleY(1); opacity: 0.35; }
+.wl-continuum .cn-beats li.is-on { color: var(--white); }
+.wl-continuum .cn-beats li.is-on .cn-bn { color: var(--cyan); }
+.wl-continuum .cn-beats li.is-on::before { transform: scaleY(1); }
+
+/* contributions, revealed with their beats */
+.wl-continuum .cn-c {
+  position: absolute; left: var(--gutter); bottom: calc(92px + env(safe-area-inset-bottom));
+  max-width: min(380px, calc(100vw - 2 * var(--gutter)));
+}
+.wl-continuum .cn-ck {
+  display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; color: var(--white);
+}
+.wl-continuum .cn-ck b { width: 5px; height: 5px; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); transform: rotate(45deg); flex: none; }
+.wl-continuum .cn-ck::after { content: ''; width: 30px; height: 1px; background: var(--cyan); opacity: 0.5; }
+.wl-continuum .cn-c p { margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: var(--dim); font-weight: 300; }
+
+/* end: metrics, link, stack */
+.wl-continuum .cn-end {
+  position: absolute; left: var(--gutter); bottom: calc(86px + env(safe-area-inset-bottom));
+  max-width: min(760px, calc(100vw - 2 * var(--gutter))); display: flex; flex-direction: column; gap: 22px;
+}
+.wl-continuum .cn-ros { display: grid; grid-template-columns: repeat(4, auto); gap: 18px 38px; }
+.wl-continuum .cn-ros .ro-v { font-size: clamp(20px, 1.9vw, 30px); }
+.wl-continuum .cn-links { display: flex; flex-wrap: wrap; gap: 10px; }
+.wl-continuum .cn-tags { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+
+@media (max-width: 760px) {
+  .wl-continuum .cn-beats {
+    top: calc(64px + env(safe-area-inset-top)); left: var(--gutter); right: var(--gutter); transform: none;
+    flex-direction: row; gap: 4px; padding: 0; border-left: 0;
+  }
+  .wl-continuum .cn-beats li { flex: 1; display: block; height: 22px; border-top: 1px solid var(--line); padding-top: 6px; font-size: 8px; letter-spacing: 0.12em; }
+  .wl-continuum .cn-beats li::before { left: 0; right: 0; top: -1px; bottom: auto; width: auto; height: 1px; transform: scaleX(0); transform-origin: 0 50%; }
+  .wl-continuum .cn-beats li.is-done::before, .wl-continuum .cn-beats li.is-on::before { transform: scaleX(1); }
+  .wl-continuum .cn-bn { display: none; }
+  .wl-continuum .cn-bt { display: none; }
+  .wl-continuum .cn-beats li.is-on .cn-bt { display: block; position: absolute; left: 0; white-space: nowrap; color: var(--white); }
+  .wl-continuum .cn-beats li:nth-child(n+4).is-on .cn-bt { left: auto; right: 0; }
+  .wl-continuum .cn-c { bottom: calc(78px + env(safe-area-inset-bottom)); }
+  .wl-continuum .cn-c p { font-size: 13px; }
+  .wl-continuum .cn-end { bottom: calc(76px + env(safe-area-inset-bottom)); gap: 14px; }
+  .wl-continuum .cn-ros { grid-template-columns: repeat(2, auto); gap: 12px 24px; }
+  .wl-continuum .cn-ros .ro-n { display: none; }
+}

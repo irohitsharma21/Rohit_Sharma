@@ -1,0 +1,22 @@
+/* infra world styles (scope everything under .wl-infra) */
+.wl-infra .ih-head .w-lede { max-width: 36ch; }
+.wl-infra .ih-stack {
+  position: absolute; left: var(--gutter); bottom: calc(84px + 4vh);
+  display: flex; flex-direction: column; gap: 12px; max-width: min(520px, calc(100vw - 2 * var(--gutter)));
+}
+.wl-infra .ih-k { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.24em; color: var(--cyan); }
+.wl-infra .ih-tags { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+.wl-infra .ih-msg { position: absolute; left: var(--gutter); top: calc(84px + 13vh); max-width: min(560px, 86vw); }
+.wl-infra .ih-pre { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.26em; color: var(--smoke); margin-bottom: 18px; }
+.wl-infra .ih-pre::before { content: ''; width: 28px; height: 1px; background: var(--cyan); opacity: 0.7; }
+.wl-infra .ih-line {
+  margin: 0; font-family: var(--sans); font-weight: 200; font-size: clamp(24px, 2.5vw, 38px); line-height: 1.16;
+  letter-spacing: -0.022em; color: rgba(234, 240, 246, 0.9); text-wrap: balance;
+  text-shadow: 0 0 28px rgba(0, 0, 0, 0.85), 0 0 2px rgba(0, 0, 0, 0.6);
+}
+.wl-infra .ih-w { display: inline-block; }
+@media (max-width: 760px) {
+  .wl-infra .ih-stack { bottom: 84px; }
+  .wl-infra .ih-tags { gap: 7px 14px; }
+  .wl-infra .ih-msg { top: calc(80px + 10vh); }
+}

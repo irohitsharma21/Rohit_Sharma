@@ -1,0 +1,62 @@
+/* meetai world styles (scope everything under .wl-meetai) */
+.wl-meetai .mx-head .w-lede { max-width: 36ch; }
+
+/* 7-stage flow indicator: a quiet vertical index on the right edge */
+.wl-meetai .mx-flow {
+  position: absolute; right: var(--gutter); top: 50%; margin: 0; padding: 0 0 0 14px; list-style: none;
+  transform: translateY(-50%); display: flex; flex-direction: column; gap: 11px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; color: rgba(220, 232, 244, 0.3);
+  border-left: 1px solid var(--line);
+}
+.wl-meetai .mx-flow li { position: relative; display: grid; grid-template-columns: 22px auto; column-gap: 8px; align-items: baseline; transition: color 0.6s var(--ease); }
+.wl-meetai .mx-flow li::before {
+  content: ''; position: absolute; left: -15px; top: -3px; bottom: -3px; width: 1px; background: var(--cyan);
+  transform: scaleY(0); transform-origin: 50% 0; transition: transform 0.7s var(--ease);
+}
+.wl-meetai .mx-n { font-variant-numeric: tabular-nums; color: rgba(220, 232, 244, 0.22); transition: color 0.6s var(--ease); }
+.wl-meetai .mx-d {
+  grid-column: 2; font-size: 9.5px; letter-spacing: 0.08em; color: var(--dim); text-transform: none;
+  max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.7s var(--ease), opacity 0.6s var(--ease), margin 0.7s var(--ease);
+}
+.wl-meetai .mx-flow li.is-done { color: rgba(220, 232, 244, 0.5); }
+.wl-meetai .mx-flow li.is-done::before { transform: scaleY(1); opacity: 0.35; }
+.wl-meetai .mx-flow li.is-on { color: var(--white); }
+.wl-meetai .mx-flow li.is-on .mx-n { color: var(--cyan); }
+.wl-meetai .mx-flow li.is-on::before { transform: scaleY(1); }
+.wl-meetai .mx-flow li.is-on .mx-d { max-height: 2em; opacity: 1; margin-top: 5px; }
+
+.wl-meetai .mx-new { font-style: normal; margin-left: 8px; font-size: 7.5px; letter-spacing: 0.16em; color: var(--cyan); opacity: 0.7; vertical-align: 1px; }
+
+/* end: facts + links */
+.wl-meetai .mx-end {
+  position: absolute; left: var(--gutter); bottom: calc(88px + env(safe-area-inset-bottom)); max-width: min(440px, calc(100vw - 2 * var(--gutter)));
+  display: flex; flex-direction: column; gap: 16px;
+}
+.wl-meetai .mx-full { margin: 0; font-size: 14px; line-height: 1.55; color: var(--dim); font-weight: 300; }
+.wl-meetai .mx-latest { margin: -4px 0 0; font-family: var(--mono); font-size: 9.5px; line-height: 1.7; letter-spacing: 0.14em; color: var(--dim); }
+.wl-meetai .mx-latest span { color: var(--cyan); margin-right: 10px; }
+.wl-meetai .mx-links { display: flex; flex-wrap: wrap; gap: 10px; }
+.wl-meetai .mx-tags { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+
+@media (max-width: 760px) {
+  /* compact horizontal indicator under the nav */
+  .wl-meetai .mx-flow {
+    top: calc(64px + env(safe-area-inset-top)); right: var(--gutter); left: var(--gutter); transform: none;
+    flex-direction: row; gap: 4px; padding: 0; border-left: 0;
+  }
+  .wl-meetai .mx-flow li { flex: 1; display: block; height: 22px; border-top: 1px solid var(--line); padding-top: 6px; font-size: 8px; letter-spacing: 0.12em; }
+  .wl-meetai .mx-flow li::before { left: 0; right: 0; top: -1px; bottom: auto; width: auto; height: 1px; transform: scaleX(0); transform-origin: 0 50%; }
+  .wl-meetai .mx-flow li.is-done::before, .wl-meetai .mx-flow li.is-on::before { transform: scaleX(1); }
+  .wl-meetai .mx-n { display: none; }
+  .wl-meetai .mx-t { display: none; }
+  .wl-meetai .mx-flow li.is-on .mx-t { display: block; position: absolute; left: 0; white-space: nowrap; color: var(--white); }
+  .wl-meetai .mx-flow li:nth-child(n+6).is-on .mx-t { left: auto; right: 0; }
+  .wl-meetai .mx-d { display: none; }
+  .wl-meetai .mx-new { display: none; }
+  .wl-meetai .mx-flow li.is-on .mx-new { display: inline; }
+  .wl-meetai .mx-end { bottom: calc(76px + env(safe-area-inset-bottom)); gap: 12px; }
+  .wl-meetai .mx-full { font-size: 13px; }
+}
+
+/* the lit floor rail passes under the end block: keep small copy legible over it */
+.wl-meetai .mx-end { text-shadow: 0 0 10px rgba(3, 5, 7, 0.95), 0 0 2px rgba(3, 5, 7, 0.9); }

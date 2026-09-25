@@ -1,0 +1,56 @@
+/* experience world styles (scope everything under .wl-experience) */
+.wl-experience .xp-head .w-title { font-weight: 200; }
+
+/* current role: persistent, compact, top-left */
+.wl-experience .xp-role { position: absolute; left: var(--gutter); top: 15vh; max-width: min(420px, 80vw); }
+.wl-experience .xp-now { display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.24em; color: var(--cyan); }
+.wl-experience .xp-now i { width: 5px; height: 5px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); }
+.wl-experience .xp-title { margin-top: 12px; font-size: clamp(26px, 2.6vw, 40px); font-weight: 300; letter-spacing: -0.025em; line-height: 1.05; color: var(--white); }
+.wl-experience .xp-co { margin-top: 8px; font-size: 14px; color: var(--chrome); font-weight: 400; }
+.wl-experience .xp-co span { color: var(--smoke); margin: 0 4px; }
+.wl-experience .xp-period { margin-top: 6px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; color: var(--dim); text-transform: uppercase; }
+
+/* stage index: bottom-to-top like the tower itself */
+.wl-experience .xp-index {
+  position: absolute; left: var(--gutter); top: calc(15vh + 150px); margin: 0; padding: 0 0 0 18px; list-style: none;
+  display: flex; flex-direction: column; gap: 9px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em;
+}
+.wl-experience .xp-index li { display: flex; gap: 12px; color: rgba(220, 232, 244, 0.26); transition: color 0.6s var(--ease); }
+.wl-experience .xp-index li.is-done { color: var(--dim); }
+.wl-experience .xp-index li.is-on { color: var(--white); }
+.wl-experience .xp-index li.is-on .xp-n { color: var(--cyan); }
+.wl-experience .xp-n { width: 18px; }
+.wl-experience .xp-track { position: absolute; left: 0; top: 2px; bottom: 2px; width: 1px; background: var(--line); overflow: hidden; }
+.wl-experience .xp-track b { position: absolute; inset: 0; background: linear-gradient(0deg, var(--blue), var(--cyan)); transform-origin: 50% 100%; transform: scaleY(0); }
+
+/* stage text: bottom-left */
+.wl-experience .xp-stage { position: absolute; left: var(--gutter); bottom: 110px; width: min(440px, calc(100vw - 32px)); }
+.wl-experience .xp-sc { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.24em; color: var(--smoke); }
+.wl-experience .xp-sl { margin-top: 10px; font-size: clamp(38px, 4.4vw, 64px); font-weight: 200; letter-spacing: 0.02em; line-height: 1; color: var(--white); }
+.wl-experience .xp-st { margin: 14px 0 0; font-size: clamp(14px, 1.1vw, 16px); line-height: 1.55; color: var(--dim); max-width: 46ch; }
+.wl-experience .xp-ro { display: flex; gap: 40px; margin-top: 20px; }
+
+/* closing summary */
+.wl-experience .xp-final { position: absolute; left: var(--gutter); top: 15vh; width: min(520px, calc(100vw - 32px)); }
+.wl-experience .xp-fh { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; padding-bottom: 12px; border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; color: var(--chrome); }
+.wl-experience .xp-fh span:last-child { color: var(--smoke); }
+.wl-experience .xp-final ul { margin: 14px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.wl-experience .xp-final li { position: relative; padding-left: 20px; font-size: 13.5px; line-height: 1.5; color: var(--dim); }
+.wl-experience .xp-final li::before { content: ''; position: absolute; left: 0; top: 0.72em; width: 8px; height: 1px; background: var(--cyan); }
+.wl-experience .xp-edu { margin-top: 26px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: rgba(220, 232, 244, 0.42); line-height: 1.5; }
+.wl-experience .xp-ek { font-family: var(--mono); font-size: 9px; letter-spacing: 0.24em; color: var(--smoke); }
+
+@media (max-width: 760px) {
+  .wl-experience::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(180deg, rgba(3,5,7,0.8) 0%, rgba(3,5,7,0) 32%, rgba(3,5,7,0) 50%, rgba(3,5,7,0.72) 64%, rgba(3,5,7,0.9) 80%);
+  }
+  .wl-experience .xp-role { top: 11vh; }
+  .wl-experience .xp-title { font-size: 24px; }
+  .wl-experience .xp-index { display: none; }
+  .wl-experience .xp-stage { bottom: 84px; }
+  .wl-experience .xp-sl { font-size: 36px; }
+  .wl-experience .xp-final { top: 11vh; }
+  .wl-experience .xp-final li { font-size: 12.5px; }
+  .wl-experience .xp-final li:nth-child(n+5) { display: none; }
+}

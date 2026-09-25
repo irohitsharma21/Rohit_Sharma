@@ -1,0 +1,63 @@
+/* hero world styles (scope everything under .wl-hero) */
+.wl-hero .hero-id {
+  position: absolute; left: var(--gutter); bottom: calc(96px + 5vh); max-width: calc(100vw - 2 * var(--gutter));
+  will-change: opacity, filter, transform; transform-origin: 0 100%;
+}
+.wl-hero .hero-sys {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 26px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.26em; color: var(--smoke);
+  opacity: 0; transform: translateY(8px); transition: opacity 1.2s var(--ease) 0.2s, transform 1.2s var(--ease) 0.2s;
+}
+.wl-hero .hero-sys i { width: 5px; height: 5px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 10px var(--cyan); }
+.wl-hero .hero-name {
+  margin: 0; font-family: var(--sans); font-weight: 300; font-size: clamp(38px, 6.4vw, 104px);
+  line-height: 0.92; letter-spacing: 0.035em; color: var(--white); white-space: nowrap;
+  text-shadow: 0 0 40px rgba(3, 5, 7, 0.9);
+}
+.wl-hero .hero-name span {
+  display: inline-block; opacity: 0; filter: blur(12px); transform: translateY(0.12em);
+  transition: opacity 1.4s var(--ease), filter 1.6s var(--ease), transform 1.6s var(--ease);
+  transition-delay: calc(var(--i) * 45ms);
+}
+.wl-hero .hero-role {
+  margin-top: 22px; font-family: var(--mono); font-weight: 400; font-size: clamp(11px, 0.95vw, 13px);
+  letter-spacing: 0.42em; color: var(--ice);
+  opacity: 0; transition: opacity 1.4s var(--ease) 0.75s;
+}
+.wl-hero .hero-tag {
+  display: flex; align-items: center; gap: 14px; margin-top: 12px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.26em; color: var(--dim);
+  opacity: 0; transition: opacity 1.4s var(--ease) 1.05s;
+}
+.wl-hero .hero-tag::before { content: ''; width: 28px; height: 1px; background: var(--cyan); opacity: 0.6; }
+.wl-hero.is-on .hero-sys { opacity: 1; transform: none; }
+.wl-hero.is-on .hero-name span { opacity: 1; filter: blur(0); transform: none; }
+.wl-hero.is-on .hero-role, .wl-hero.is-on .hero-tag { opacity: 1; }
+
+/* core state: a quiet machine readout, bottom right */
+.wl-hero .hero-state {
+  position: absolute; right: var(--gutter); bottom: calc(96px + 5vh); width: 190px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; color: rgba(220, 232, 244, 0.32);
+  opacity: 0; transition: opacity 1.4s var(--ease) 1.3s;
+}
+.wl-hero.is-on .hero-state { opacity: 1; }
+.wl-hero .hst-k { color: var(--smoke); margin-bottom: 12px; }
+.wl-hero .hero-state ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+.wl-hero .hero-state li { display: flex; gap: 12px; transition: color 0.6s var(--ease); }
+.wl-hero .hero-state li b { font-weight: 400; color: rgba(220, 232, 244, 0.2); transition: color 0.6s var(--ease); }
+.wl-hero .hero-state li.is-on { color: var(--white); }
+.wl-hero .hero-state li.is-on b { color: var(--cyan); }
+.wl-hero .hst-bar { height: 1px; margin-top: 14px; background: var(--line); overflow: hidden; }
+.wl-hero .hst-bar i { display: block; height: 100%; background: var(--cyan); transform-origin: 0 50%; transform: scaleX(0); }
+
+@media (max-width: 760px) {
+  .wl-hero .hero-id { bottom: calc(150px + 4vh); }
+  .wl-hero .hero-name { font-size: clamp(34px, 10.4vw, 54px); letter-spacing: 0.02em; }
+  .wl-hero .hero-role { margin-top: 16px; letter-spacing: 0.34em; }
+  .wl-hero .hero-tag { font-size: 8.5px; letter-spacing: 0.16em; gap: 10px; }
+  .wl-hero .hero-tag::before { width: 16px; }
+  .wl-hero .hero-state { left: var(--gutter); right: auto; bottom: calc(84px + 2vh); width: auto; }
+  .wl-hero .hero-state ol { display: flex; gap: 16px; }
+  .wl-hero .hero-state li { gap: 6px; font-size: 9px; letter-spacing: 0.14em; }
+  .wl-hero .hst-k, .wl-hero .hst-bar { display: none; }
+}

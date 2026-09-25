@@ -1,0 +1,73 @@
+/* finale world styles (scope everything under .wl-finale) */
+.wl-finale .fn-intro { position: absolute; left: var(--gutter); top: 18vh; }
+.wl-finale .fn-sys { margin: 18px 0 0; display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.3em; color: var(--white); }
+.wl-finale .fn-sys i { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 12px var(--cyan); animation: fnPulse 2s ease-in-out infinite; }
+.wl-finale .fn-count { margin: 12px 0 0; display: flex; align-items: baseline; gap: 8px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; color: var(--smoke); }
+.wl-finale .fn-count b { color: var(--chrome); font-weight: 400; font-variant-numeric: tabular-nums; }
+.wl-finale .fn-count em { font-style: normal; color: rgba(220, 232, 244, 0.3); margin-right: 14px; }
+@keyframes fnPulse { 50% { opacity: 0.35; box-shadow: 0 0 3px var(--cyan); } }
+
+.wl-finale .fn-final {
+  position: absolute; left: var(--gutter); top: 50%; transform: translateY(-52%);
+  width: min(590px, calc(100vw - 2 * var(--gutter)));
+}
+.wl-finale .fn-final::before {
+  content: ''; position: absolute; z-index: -1; left: calc(-1 * var(--gutter) - 10vw); top: -30%; bottom: -30%; width: calc(100% + 26vw);
+  background: radial-gradient(closest-side, rgba(3, 5, 7, 0.72), rgba(3, 5, 7, 0.4) 55%, rgba(3, 5, 7, 0)); pointer-events: none;
+  opacity: var(--fn-back, 0); transition: opacity 0.6s;
+}
+.wl-finale .fn-kicker { display: flex; align-items: center; gap: 14px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.24em; color: var(--cyan); white-space: nowrap; }
+.wl-finale .fn-kicker span:last-child { color: var(--smoke); }
+.wl-finale .fn-kline { flex: 0 0 44px; height: 1px; background: var(--line-strong); }
+.wl-finale .fn-name {
+  margin: 22px 0 0; font-weight: 300; font-size: clamp(44px, 7vw, 116px); line-height: 0.9; letter-spacing: -0.045em;
+  color: var(--white); white-space: nowrap;
+}
+.wl-finale .fn-name span:last-child { color: transparent; background: linear-gradient(100deg, #eaf0f6 10%, #bfe9ff 55%, #62d8ff 100%); -webkit-background-clip: text; background-clip: text; }
+.wl-finale .fn-role { margin-top: 20px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.42em; color: var(--chrome); }
+.wl-finale .fn-close { margin: 22px 0 0; max-width: 30ch; font-size: clamp(18px, 1.6vw, 24px); line-height: 1.4; letter-spacing: -0.01em; color: var(--dim); font-weight: 300; }
+
+.wl-finale .fn-links { margin-top: clamp(26px, 4vh, 44px); display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+.wl-finale .fn-link {
+  position: relative; display: grid; grid-template-columns: 128px 1fr auto; align-items: baseline; gap: 18px;
+  padding: clamp(12px, 1.7vh, 18px) 4px; border-bottom: 1px solid var(--line); color: var(--chrome);
+  transition: color 0.5s var(--ease);
+}
+.wl-finale .fn-link::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: linear-gradient(90deg, var(--cyan), rgba(98, 216, 255, 0));
+  transform: scaleX(0); transform-origin: 0 50%; transition: transform 0.8s var(--ease);
+}
+.wl-finale .fn-link:hover { color: var(--white); }
+.wl-finale .fn-link:hover::after { transform: scaleX(1); }
+.wl-finale .fl-k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; color: var(--smoke); transition: color 0.5s var(--ease); }
+.wl-finale .fn-link:hover .fl-k { color: var(--cyan); }
+.wl-finale .fl-v { font-size: clamp(18px, 1.9vw, 28px); font-weight: 300; letter-spacing: -0.02em; overflow-wrap: anywhere; min-width: 0; }
+.wl-finale .fl-a { font-style: normal; font-family: var(--mono); font-size: 14px; color: var(--cyan); opacity: 0.55; transition: transform 0.6s var(--ease), opacity 0.4s; }
+.wl-finale .fn-link:hover .fl-a { opacity: 1; transform: translate(4px, -2px); }
+
+.wl-finale .fn-hint { position: absolute; right: var(--gutter); top: 16vh; margin: 0; display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; color: var(--smoke); }
+.wl-finale .fn-hint i { width: 14px; height: 14px; border: 1px solid rgba(98, 216, 255, 0.5); border-radius: 50%; box-shadow: inset 0 0 0 4px rgba(3, 5, 7, 1), inset 0 0 0 6px rgba(98, 216, 255, 0.6); }
+
+.wl-finale .fn-foot {
+  position: absolute; left: var(--gutter); right: var(--gutter); bottom: calc(66px + env(safe-area-inset-bottom));
+  display: flex; justify-content: flex-start; gap: 36px; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.18em; color: rgba(220, 232, 244, 0.34);
+  text-transform: uppercase;
+}
+
+@media (max-width: 760px) {
+  .wl-finale .fn-intro { top: 13vh; }
+  .wl-finale .fn-final { top: auto; bottom: calc(96px + env(safe-area-inset-bottom)); transform: none; }
+  .wl-finale .fn-kicker span:last-child, .wl-finale .fn-kline { display: none; }
+  .wl-finale .fn-name { margin-top: 14px; font-size: clamp(40px, 12.4vw, 60px); }
+  .wl-finale .fn-role { margin-top: 12px; font-size: 10.5px; letter-spacing: 0.34em; }
+  .wl-finale .fn-close { margin-top: 12px; font-size: 16px; }
+  .wl-finale .fn-links { margin-top: 18px; }
+  .wl-finale .fn-link { grid-template-columns: 1fr auto; gap: 2px 12px; padding: 10px 2px; }
+  .wl-finale .fl-k { grid-column: 1 / -1; font-size: 9px; }
+  .wl-finale .fl-v { font-size: 16px; }
+  .wl-finale .fn-foot { flex-direction: column; gap: 4px; bottom: calc(58px + env(safe-area-inset-bottom)); font-size: 8.5px; letter-spacing: 0.12em; }
+}
+@media (max-height: 760px) and (min-width: 761px) {
+  .wl-finale .fn-name { font-size: clamp(44px, 6vw, 92px); }
+  .wl-finale .fn-close { margin-top: 14px; }
+}

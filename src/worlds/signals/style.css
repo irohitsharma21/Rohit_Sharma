@@ -1,0 +1,66 @@
+/* signals world styles (scope everything under .wl-signals) */
+.wl-signals .sg-head .w-title { font-weight: 200; }
+
+.wl-signals .sg-sig {
+  position: absolute; left: 50%; top: 21vh; transform: translateX(-50%);
+  width: min(920px, calc(100vw - 32px)); text-align: center;
+  display: flex; flex-direction: column; align-items: center;
+}
+.wl-signals .sg-code {
+  display: flex; align-items: center; gap: 14px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.26em; color: var(--smoke);
+}
+.wl-signals .sg-code i { width: 36px; height: 1px; background: currentColor; opacity: 0.5; }
+.wl-signals .sg-lock { color: var(--cyan); transition: color 0.6s var(--ease); }
+.wl-signals .sg-code.is-locked .sg-lock { color: var(--ice); }
+.wl-signals .sg-code.is-locked .sg-lock::before {
+  content: ''; display: inline-block; width: 5px; height: 5px; border-radius: 50%; margin-right: 8px; vertical-align: 1px;
+  background: var(--green); box-shadow: 0 0 8px var(--green);
+}
+
+/* The title "lights up": --lit 0..1 drives exposure, focus and tracking together. */
+.wl-signals .sg-title {
+  --lit: 0;
+  margin: 18px 0 0; font-family: var(--sans); font-weight: 200;
+  font-size: clamp(44px, 7.4vw, 118px); line-height: 0.95; white-space: nowrap;
+  letter-spacing: calc(0.12em - var(--lit) * 0.155em);
+  color: rgb(234 240 246 / calc(0.15 + var(--lit) * 0.85));
+  filter: blur(calc((1 - var(--lit)) * 10px));
+  text-shadow: 0 0 calc(var(--lit) * 42px) rgb(98 216 255 / calc(var(--lit) * 0.16)), 0 0 2px rgb(191 233 255 / calc(var(--lit) * 0.35));
+}
+.wl-signals .sg-status {
+  margin-top: 22px; font-family: var(--mono); font-size: clamp(11px, 0.95vw, 13px); letter-spacing: 0.42em; color: var(--ice);
+  padding-left: 0.42em;
+}
+.wl-signals .sg-proj { margin-top: 10px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; color: var(--cyan); text-transform: uppercase; }
+.wl-signals .sg-detail {
+  margin: 12px 0 0; font-size: clamp(13px, 1.05vw, 16px); font-weight: 300; color: var(--dim); max-width: 52ch; line-height: 1.55;
+}
+.wl-signals .sg-prize {
+  margin-top: 22px; display: grid; grid-template-columns: auto auto; column-gap: 14px; row-gap: 8px; align-items: baseline;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.24em;
+}
+.wl-signals .sg-pk { color: var(--smoke); }
+.wl-signals .sg-pk::after { content: ' ·'; }
+.wl-signals .sg-pv { color: var(--white); font-variant-numeric: tabular-nums; }
+.wl-signals .sg-gauge { grid-column: 1 / -1; height: 1px; background: var(--line); overflow: hidden; position: relative; }
+.wl-signals .sg-gauge b { position: absolute; inset: 0; background: linear-gradient(90deg, var(--blue), var(--cyan)); transform-origin: 0 50%; transform: scaleX(0); }
+
+/* closing register, bottom-left, once all three are locked */
+.wl-signals .sg-log {
+  position: absolute; left: var(--gutter); top: calc(112px + env(safe-area-inset-top)); width: min(440px, calc(100vw - 32px));
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; color: var(--dim);
+}
+.wl-signals .sg-log-h { display: flex; justify-content: space-between; padding-bottom: 10px; margin-bottom: 8px; border-bottom: 1px solid var(--line); color: var(--chrome); letter-spacing: 0.24em; }
+.wl-signals .sg-ok { color: var(--cyan); }
+.wl-signals .sg-log-r { display: grid; grid-template-columns: 56px 1fr auto; gap: 10px; padding: 5px 0; }
+.wl-signals .sg-log-r span:first-child { color: var(--smoke); }
+.wl-signals .sg-log-r span:nth-child(2) { color: var(--white); }
+
+@media (max-width: 760px) {
+  .wl-signals .sg-sig { top: 19vh; }
+  .wl-signals .sg-title { white-space: normal; font-size: clamp(40px, 12vw, 64px); }
+  .wl-signals .sg-status { letter-spacing: 0.28em; }
+  .wl-signals .sg-log-r { grid-template-columns: 44px 1fr; }
+  .wl-signals .sg-log-r span:nth-child(3) { display: none; }
+}
