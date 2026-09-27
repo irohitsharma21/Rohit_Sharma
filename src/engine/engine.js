@@ -117,45 +117,35 @@ export class Engine {
     const tm = performance.now()
     const classes = await Promise.all(metas.map((m) => m.load().then((mod) => mod.default).catch((e) => { console.error(`[world ${m.id}] load failed`, e); const C = class extends OfflineWorld {}; C.error = e; return C }).finally(() => loader.progress(0.12 + (++fetched / metas.length) * 0.4))))
     loader.log('modules', `${metas.length} worlds fetched · ${(performance.now() - tm).toFixed(0)} ms`)
-    for (let i = 0; i < metas.length; i++) {
-      const meta = metas[i]
-      const Cls = classes[i]
-      let w
-      const t0 = performance.now()
-      try {
-        w = new Cls(this.ctx, meta)
-        await w.init()
-      } catch (e) {
-        console.error(`[world ${meta.id}] init failed`, e)
-        w = new OfflineWorld(this.ctx, meta); w.error = e
-        await w.init()
-      }
-      if (Cls.error) w.error = Cls.error
-      w.height = Cls.height ?? World.height
-      w.group.position.copy(meta.offset)
-      w.group.visible = false
-      scene.add(w.group)
-      this.worlds.push(w)
-      loader.log(`world ${meta.code}`, `${meta.title.toLowerCase()} · ${(performance.now() - t0).toFixed(0)} ms`, w instanceof OfflineWorld ? 'err' : 'ok')
-      loader.progress(0.52 + (i + 1) / metas.length * 0.36)
-    }
+
+    // Modules are small, so all of them load up front (section heights come from them). A world's
+    // scene, though, is only BUILT when the visitor gets near it, and on phones and low-memory
+    // devices the worlds left behind are released again. Building all fourteen at once is what
+    // exhausts a phone's GPU memory and hangs the tab.
+    this.lowMem = params.has('lowmem') || coarse || (navigator.deviceMemory ?? 8) <= 4
+    this.keepBehind = this.lowMem ? 1 : Infinity
+    this.keepAhead = this.lowMem ? 1 : 2
+    this.worlds = metas.map((meta, i) => this.makeStub(meta, classes[i]))
 
     // --- DOM ---
     this.buildDom()
     this.post = createPost(renderer, scene, camera, quality)
     this.resize()
     addEventListener('resize', () => this.resize())
+    canvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); this.contextLost() })
 
     // --- warp streaks (belong to the camera, visible only in flight between worlds) ---
     this.buildWarp()
 
-    // --- compile every shader up front so no world hitches on first sight ---
-    // Only the first world the visitor will see blocks the boot; the rest compile in the
-    // background right after, one world at a time, long before anyone can scroll to them.
+    // --- build the first world the visitor sees, then the one the first scroll flies to ---
+    this.booting = true
     const w0id = params.get('w')
-    const first = this.worlds.find((w) => w.meta.id === w0id) || this.worlds[0]
-    await this.compileWorld(first)
-    loader.log('shaders', `${first.meta.title.toLowerCase()} compiled · rest streaming`)
+    const firstIdx = Math.max(0, this.worlds.findIndex((w) => w.meta.id === w0id))
+    const first = await this.ensure(firstIdx)
+    loader.progress(0.85)
+    await this.ensure(firstIdx + 1)
+    this.booting = false
+    loader.log('shaders', `${first.meta.title.toLowerCase()} ready · rest streams on demand`)
     loader.progress(1)
 
     // --- scroll ---
@@ -172,7 +162,113 @@ export class Engine {
     await loader.done(params.has('w') || params.has('instant'))
     this.worlds[0]?.onBoot?.()
     window.__ready = true
-    this.compileRest(first)
+  }
+
+  /** A not-yet-built world: meta, scroll height and an empty group, so everything else can index it. */
+  makeStub(meta, Cls) {
+    const w = new World(this.ctx, meta)
+    w._stub = true
+    w.Cls = Cls
+    w.height = Cls.height ?? World.height
+    w.group.position.copy(meta.offset)
+    return w
+  }
+
+  /** Build world i (once; concurrent callers share the same promise). Resolves to the live instance. */
+  ensure(i) {
+    const stub = this.worlds[i]
+    if (!stub || !stub._stub) return Promise.resolve(stub)
+    if (stub._loading) return stub._loading
+    stub._loading = (async () => {
+      const { meta, Cls } = stub
+      const t0 = performance.now()
+      let w
+      try {
+        w = new Cls(this.ctx, meta)
+        await w.init()
+      } catch (e) {
+        console.error(`[world ${meta.id}] init failed`, e)
+        w = new OfflineWorld(this.ctx, meta); w.error = e
+        await w.init()
+      }
+      if (Cls.error) w.error = Cls.error
+      w.Cls = Cls
+      w.height = stub.height
+      w.group.position.copy(meta.offset)
+      w.group.visible = false
+      this.scene.add(w.group)
+      w.el = stub.el
+      if (w.el) {
+        w.el.innerHTML = ''
+        try { w.mount(w.el) } catch (e) { console.error(`[world ${meta.id}] mount failed`, e) }
+      }
+      await this.compileWorld(w)
+      this.worlds[i] = w
+      if (this.booting) this.loader.log(`world ${meta.code}`, `${meta.title.toLowerCase()} · ${(performance.now() - t0).toFixed(0)} ms`, w instanceof OfflineWorld ? 'err' : 'ok')
+      return w
+    })()
+    return stub._loading
+  }
+
+  /** Release world i's GPU and DOM resources and put a stub back in its place. */
+  unload(i) {
+    const w = this.worlds[i]
+    if (!w || w._stub) return
+    try { w.dispose() } catch (e) { console.error(`[world ${w.meta.id}] dispose failed`, e) }
+    this.cursor.hover(null, null, w)
+    const keep = new Set([this.scene.environment, this.ctx.env])
+    const freeTex = (v) => { if (v && v.isTexture && !keep.has(v)) v.dispose() }
+    w.group.traverse((o) => {
+      o.geometry?.dispose()
+      const mats = Array.isArray(o.material) ? o.material : o.material ? [o.material] : []
+      for (const m of mats) {
+        for (const key in m) freeTex(m[key])
+        if (m.uniforms) for (const u of Object.values(m.uniforms)) freeTex(u?.value)
+        m.dispose()
+      }
+    })
+    this.scene.remove(w.group)
+    const stub = this.makeStub(w.meta, w.Cls)
+    stub.el = w.el
+    if (stub.el) { stub.el.innerHTML = ''; stub.el.style.opacity = ''; stub.el.style.visibility = '' }
+    this.worlds[i] = stub
+  }
+
+  /** Keep the worlds around the visitor built (nearest first), release the rest on low-memory devices. */
+  stream() {
+    const cur = this.state.index, n = this.worlds.length
+    const want = new Set()
+    for (let i = cur - Math.min(1, this.keepBehind); i <= cur + this.keepAhead; i++) if (i >= 0 && i < n) want.add(i)
+    if (this._target != null) { want.add(this._target); if (this._target + 1 < n) want.add(this._target + 1) }
+    // Desktops keep the original behaviour: every world gets built shortly after boot, nearest first,
+    // in idle gaps, so nothing is ever built on arrival. Only low-memory devices stay windowed.
+    const eager = this.keepBehind === Infinity
+    if (!this._streaming) {
+      const near = [...want].filter((i) => this.worlds[i]._stub)
+      const pool = near.length || !eager ? near : this.worlds.map((_, i) => i).filter((i) => this.worlds[i]._stub)
+      const next = pool.sort((a, b) => (a === this._target ? -1 : b === this._target ? 1 : Math.abs(a - cur) - Math.abs(b - cur)))[0]
+      if (next != null && (near.length || this.t >= (this._idleAt ?? 0))) {
+        this._streaming = true
+        this.ensure(next).finally(() => { this._streaming = false; this._idleAt = this.t + 0.35 })
+      }
+    }
+    if (this.keepBehind !== Infinity) {
+      for (let i = 0; i < n; i++) {
+        const w = this.worlds[i]
+        if (w._stub || want.has(i) || i === this._target) continue
+        if (i < cur - this.keepBehind - 1 || i > cur + this.keepAhead + 1) this.unload(i)
+      }
+    }
+    if (this._target === cur && !this.worlds[cur]._stub) this._target = null
+  }
+
+  contextLost() {
+    this.renderer.setAnimationLoop(null)
+    const div = document.createElement('div')
+    div.className = 'ctx-lost'
+    div.innerHTML = `<p>The graphics processor ran out of memory.</p><button type="button">Reload</button>`
+    div.querySelector('button').addEventListener('click', () => location.reload())
+    document.body.appendChild(div)
   }
 
   /** Compile one world's programs without letting it render (the group stays hidden to the frame loop). */
@@ -185,17 +281,6 @@ export class Engine {
     try { pending = this.renderer.compileAsync(w.group, this.camera, this.scene) } catch { /* not fatal */ }
     w.group.visible = was
     try { await pending } catch { /* not fatal */ }
-  }
-
-  /** Background shader warm-up, nearest worlds first, yielding between worlds so frames stay smooth. */
-  async compileRest(first) {
-    const start = this.worlds.indexOf(first)
-    const order = this.worlds.map((w, i) => [w, Math.abs(i - start) + (i < start ? 0.5 : 0)]).sort((a, b) => a[1] - b[1]).map((x) => x[0])
-    for (const w of order) {
-      if (w._compiled) continue
-      await new Promise((r) => (window.requestIdleCallback ? requestIdleCallback(r, { timeout: 400 }) : setTimeout(r, 60)))
-      await this.compileWorld(w)
-    }
   }
 
   buildDom() {
@@ -213,7 +298,7 @@ export class Engine {
       s.appendChild(layer)
       main.appendChild(s)
       w.el = layer
-      try { w.mount(layer) } catch (e) { console.error(`[world ${w.meta.id}] mount failed`, e) }
+      if (!w._stub) { try { w.mount(layer) } catch (e) { console.error(`[world ${w.meta.id}] mount failed`, e) } }
       return s
     })
     this.nav = new Nav(this)
@@ -306,6 +391,8 @@ export class Engine {
   goTo(id, p = 0, immediate = false, k = 0) {
     const i = this.worlds.findIndex((w) => w.meta.id === id)
     if (i < 0) return
+    this._target = i
+    this.ensure(i)
     this.measure()
     const b = this.bounds[i]
     const y = b.start + clamp(p) * b.hold + k * this.vh
@@ -350,6 +437,7 @@ export class Engine {
       cur.active = true; cur.onEnter()
     }
     this.state.index = index; this.state.p = p; this.state.k = k
+    this.stream()
 
     // pointer smoothing (inertia everywhere)
     const P = this.pointer

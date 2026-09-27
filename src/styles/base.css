@@ -225,3 +225,7 @@ kbd {
   .os-name { display: none; }
   .os-items a { padding: 7px 6px; font-size: 8.5px; letter-spacing: 0.05em; }
 }
+
+/* ------------------------------------------------------------------ gpu context lost */
+.ctx-lost { position: fixed; inset: 0; z-index: 300; display: grid; place-content: center; gap: 18px; text-align: center; background: rgba(3, 5, 7, 0.92); font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; color: var(--dim); }
+.ctx-lost button { justify-self: center; padding: 10px 20px; border-radius: 999px; border: 1px solid var(--line-strong); background: transparent; color: var(--white); font: inherit; letter-spacing: 0.18em; cursor: pointer; }
