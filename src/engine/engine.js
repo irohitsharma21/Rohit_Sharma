@@ -192,6 +192,30 @@ export class Engine {
         await w.init()
       }
       if (Cls.error) w.error = Cls.error
+      // three.js draws transparent double-sided materials in two passes and flags the material
+      // changed between them, so every label, glass panel and hologram re-validated its shader
+      // twice per frame. That per-draw CPU cost is what froze phones. One pass looks the same here.
+// A built-in material shared by instanced and plain meshes flips shader variant on every draw
+      // too, so the instanced users get their own copy (shader materials are left alone: their
+      // uniforms are driven by reference).
+      const instancedUse = new Map()
+      w.group.traverse((o) => {
+        const mats = Array.isArray(o.material) ? o.material : o.material ? [o.material] : []
+        for (const m of mats) {
+          if (m.transparent && m.side === THREE.DoubleSide) m.forceSinglePass = true
+          if (!m.isShaderMaterial && (o.isMesh || o.isInstancedMesh)) {
+            const u = instancedUse.get(m) ?? { plain: false, inst: false }
+            u[o.isInstancedMesh ? 'inst' : 'plain'] = true
+            instancedUse.set(m, u)
+          }
+        }
+      })
+      const copies = new Map()
+      w.group.traverse((o) => {
+        if (!o.isInstancedMesh || Array.isArray(o.material)) return
+        const u = instancedUse.get(o.material)
+        if (u?.plain && u.inst) { if (!copies.has(o.material)) copies.set(o.material, o.material.clone()); o.material = copies.get(o.material) }
+      })
       w.Cls = Cls
       w.height = stub.height
       w.group.position.copy(meta.offset)

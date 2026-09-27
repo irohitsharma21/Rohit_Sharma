@@ -11,7 +11,7 @@ export const obsidian = (o = {}) => new THREE.MeshPhysicalMaterial({ color: COLO
 /** Cheap smoked glass: reflective, translucent, no transmission pass. Use this by default. */
 export const smokedGlass = (o = {}) => new THREE.MeshPhysicalMaterial({
   color: 0x0b1118, metalness: 0.1, roughness: 0.08, transparent: true, opacity: 0.35,
-  clearcoat: 1, clearcoatRoughness: 0.04, envMapIntensity: 1.4, depthWrite: false, side: THREE.DoubleSide, ...o,
+  clearcoat: 1, clearcoatRoughness: 0.04, envMapIntensity: 1.4, depthWrite: false, side: THREE.DoubleSide, forceSinglePass: true, ...o,
 })
 
 /** Real refractive crystal (adds a transmission pass the first time it is used). Use sparingly, hero pieces only. */
@@ -32,7 +32,7 @@ export const lineGlow = (color = COLOR.cyan, opacity = 0.6, intensity = 1.5) =>
 /** Fresnel rim hologram: silhouettes, scanned objects, ghost geometry. Additive, no depth write. */
 export function holo(color = COLOR.cyan, o = {}) {
   return new THREE.ShaderMaterial({
-    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, forceSinglePass: true,
     uniforms: { uColor: { value: new THREE.Color(color) }, uTime: { value: 0 }, uOpacity: { value: o.opacity ?? 1 }, uPower: { value: o.power ?? 2.2 }, uScan: { value: o.scan ?? 1 } },
     vertexShader: /* glsl */`
       varying vec3 vN; varying vec3 vV; varying vec3 vW;

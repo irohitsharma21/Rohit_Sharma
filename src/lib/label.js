@@ -18,7 +18,7 @@ export class Label extends THREE.Mesh {
     tex.colorSpace = THREE.SRGBColorSpace
     tex.anisotropy = 4
     tex.minFilter = THREE.LinearMipmapLinearFilter
-    const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, opacity: opts.opacity, toneMapped: false, side: THREE.DoubleSide })
+    const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, opacity: opts.opacity, toneMapped: false, side: THREE.DoubleSide, forceSinglePass: true })
     mat.color.setScalar(opts.intensity)
     super(new THREE.PlaneGeometry(1, 1), mat)
     this.opts = opts; this.canvas = canvas; this.texture = tex; this.text = null
